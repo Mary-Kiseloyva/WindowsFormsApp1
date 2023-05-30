@@ -60,8 +60,14 @@ namespace WindowsFormsApp1
                 if (classType != null)
                 {
                     MethodInfo[] methods = classType.GetMethods();
-                    string methodsText = string.Join(Environment.NewLine, methods.Select(m => m.Name));
-                    label2.Text = methodsText;
+
+                    comboBox2.Items.Clear();
+
+                    foreach (MethodInfo method in methods)
+                    {
+                 
+                        comboBox2.Items.Add(method.Name);
+                    }
                 }
             }
         }
@@ -69,6 +75,33 @@ namespace WindowsFormsApp1
         private void label2_Click(object sender, EventArgs e)
         {
             throw new System.NotImplementedException();
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (comboBox2.SelectedItem != null)
+            {
+                string methodName = comboBox2.SelectedItem.ToString();
+                string selectedClass = comboBox1.SelectedItem.ToString();
+                Assembly assembly = Assembly.LoadFrom(label1.Text);
+                Type classType = assembly.GetType(selectedClass);
+
+                if (classType != null)
+                {
+                    MethodInfo method = classType.GetMethod(methodName);
+
+                    if (method != null)
+                    {
+                        object classInstance = Activator.CreateInstance(classType);
+                        method.Invoke(classInstance, null);
+                    }
+                }
+            }
         }
     }
     }
